@@ -62,29 +62,32 @@
         </el-form>
         <!-- 手机号登录表单 -->
         <el-form
-          ref="loginFormRef"
+          ref="phoneFormRef"
           label-width="0px"
           :rules="loginFormRules"
           class="login_form"
-          :model="loginForm"
+          :model="phoneLoginForm"
           :style="phoneForm ? '' : 'display:none'"
         >
           <!-- 用户名 -->
           <el-form-item prop="username">
             <el-input
-              placeholder="请输入账号"
+              placeholder="请输入手机号"
               prefix-icon="el-icon-user"
-              v-model="loginForm.phone"
+              v-model="phoneLoginForm.phone"
             ></el-input>
           </el-form-item>
           <!-- 密码 -->
-          <el-form-item prop="password">
+          <el-form-item prop="code">
             <el-input
-              placeholder="请输入密码"
-              prefix-icon="el-icon-lock"
-              v-model="loginForm.password"
-              type="password"
-            ></el-input>
+              placeholder="短信验证码"
+              v-model="loginForm.code"
+              style="width: 50%"
+            >
+            </el-input>
+            <el-button style="width: 50%" @click="getCode" id="codeChange"
+              >获取验证码</el-button
+            >
           </el-form-item>
           <!-- 按钮 -->
           <el-form-item class="btns">
@@ -98,6 +101,10 @@
           src="https://th.bing.com/th/id/Ra8f466ae8171f74d8a9cfcd7e7284be6?rik=fYW6GHVusYvm%2bA&riu=http%3a%2f%2ftupian.qqw21.com%2farticle%2fUploadPic%2f2019-6%2f201962717313730705.jpeg&ehk=b9fcz8JyM7Z%2b7GY1y%2fQcyzRQ0VlJa8XYUwxV2HBTmLo%3d&risl=&pid=ImgRaw"
           alt=""
         />
+        <div class="sport1"></div>
+        <div class="sport2"></div>
+        <div class="sport3"></div>
+        <div class="sport4"></div>
       </div>
     </div>
     <div class="bgBox"></div>
@@ -113,6 +120,10 @@ export default {
       loginForm: {
         phone: "15731214911",
         password: "yuxi1314",
+      },
+      phoneLoginForm: {
+        phone: "",
+        code: null,
       },
       //表单验证规则对象
       loginFormRules: {
@@ -155,6 +166,16 @@ export default {
         return console.log(res);
       }
     },
+    async getCode() {
+      document.getElementById("codeChange").disabled = true;
+      // this.$http.get("/captcha/sent?phone=" + this.phoneLoginForm.phone);
+      let i = 60;
+      while (i > 0) {
+        setTimeout(() => {
+          document.getElementById("codeChange").innerHTML = i--;
+        }, 1000);
+      }
+    },
   },
 };
 </script>
@@ -194,6 +215,98 @@ export default {
   top: 50%;
   left: 20%;
   transform: translateY(-50%);
+}
+.sport1 {
+  position: absolute;
+  bottom: 70px;
+  left: -30px;
+  width: 450px;
+  height: 30px;
+  background-color: #000;
+  animation: myMove1 10s infinite;
+}
+.sport2 {
+  position: absolute;
+  right: 80px;
+  bottom: 500px;
+  width: 30px;
+  height: 30px;
+  background-color: #000;
+  animation: myMove2 10s infinite;
+}
+.sport3 {
+  position: absolute;
+  bottom: 70px;
+  left: -30px;
+  width: 30px;
+  height: 30px;
+  background-color: #000;
+  animation: myMove3 10s infinite;
+}
+.sport4 {
+  position: absolute;
+  top: -20px;
+  right: 80px;
+  width: 30px;
+  height: 30px;
+  background-color: #000;
+  animation: myMove4 10s infinite;
+}
+@keyframes myMove1 {
+  0% {
+    width: 350px;
+    background-color: rgb(165, 0, 0);
+  }
+  50% {
+    width: 100px;
+    background-color: #000;
+  }
+  100% {
+    width: 350px;
+    background-color: rgb(165, 0, 0);
+  }
+}
+@keyframes myMove2 {
+  0% {
+    width: 350px;
+    background-color: rgb(165, 0, 0);
+  }
+  50% {
+    width: 100px;
+    background-color: #000;
+  }
+  100% {
+    width: 350px;
+    background-color: rgb(165, 0, 0);
+  }
+}
+@keyframes myMove3 {
+  0% {
+    height: 100px;
+    background-color: rgb(165, 0, 0);
+  }
+  50% {
+    height: 350px;
+    background-color: rgb(0, 0, 0);
+  }
+  100% {
+    height: 100px;
+    background-color: rgb(165, 0, 0);
+  }
+}
+@keyframes myMove4 {
+  0% {
+    height: 100px;
+    background-color: rgb(165, 0, 0);
+  }
+  50% {
+    height: 350px;
+    background-color: #000;
+  }
+  100% {
+    height: 100px;
+    background-color: rgb(165, 0, 0);
+  }
 }
 .login_box {
   margin-top: -60px;
