@@ -156,7 +156,7 @@ export default {
       }
       if (res.statusText === "OK") {
         this.$message.success("登陆成功！");
-        //token只应在当前网站打开期间生效,所以将token保存在sessionStorage中
+        // token只应在当前网站打开期间生效,所以将token保存在sessionStorage中
         // window.sessionStorage.setItem("token", res.token);
         // this.$store.commit("getProfile", res.data.profile);
         window.localStorage.setItem("getP", JSON.stringify(res.data.profile));
