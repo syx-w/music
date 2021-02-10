@@ -1,0 +1,184 @@
+/* 获取根元素 */
+:root {
+  --color-text: #edbdbd;
+  --color-red: #c62f2f;
+  --color-line: #e1e1e2;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: serif;
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.w {
+  width: 1200px;
+  margin: 0 auto;
+}
+
+a {
+  text-decoration: none;
+  color: #edbdbd;
+  font-size: 13px;
+}
+
+i {
+  color: #edbdbd;
+}
+
+.d {
+  display: inline-block;
+}
+
+.test-1::-webkit-scrollbar {
+  /*滚动条整体样式*/
+  width: 10px;
+  /*高宽分别对应横竖滚动条的尺寸*/
+  height: 1px;
+}
+
+.test-1::-webkit-scrollbar-thumb {
+  /*滚动条里面小方块*/
+  border-radius: 10px;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  background: #bebebe;
+}
+
+.test-1::-webkit-scrollbar-track {
+  /*滚动条里面轨道*/
+  box-shadow: inset 0 0 0px rgba(255, 255, 255, 0);
+  border-radius: 0px;
+  background: rgba(0, 0, 0, 0);
+}
+
+.test-2::-webkit-scrollbar {
+  /*滚动条整体样式*/
+  width: 1px;
+  /*高宽分别对应横竖滚动条的尺寸*/
+  height: 1px;
+}
+
+.test-2::-webkit-scrollbar-thumb {
+  /*滚动条里面小方块*/
+  border-radius: 1px;
+  box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0);
+}
+
+.test-2::-webkit-scrollbar-track {
+  /*滚动条里面轨道*/
+  box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.2);
+  border-radius: 1px;
+  background: rgba(0, 0, 0, 0);
+}
+
+body,
+td,
+th {
+  font-family: Verdana, Arial, Helvetica, sans-serif
+}
+
+li {
+  list-style: none;
+  display: inline-block;
+}
+
+.clearMarginRight {
+  margin-right: 0 !important;
+}
+
+.cr {
+  margin-right: 0 !important;
+}
+
+/* 触碰文字变黑 */
+.cur {
+  cursor: pointer;
+}
+
+.cur:hover {
+  color: #000 !important;
+}
+
+/* 不换行 */
+.nowp {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 清除浮动 */
+.clearfix:after {
+  /*伪元素是行内元素 正常浏览器清除浮动方法*/
+  content: "";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+.clearfix {
+  *zoom: 1;
+  /*ie6清除浮动的方式 *号只有IE6-IE7执行，其他浏览器不执行*/
+}
+
+/* 动画效果 */
+.slide-right-enter-active,
+.slide-right-leave-active,
+.slide-com-enter-active,
+.slide-com-leave-active,
+.slide-back-enter-active,
+.slide-back-leave-active,
+.slide-left-enter-active,
+.slide-left-leave-active {
+  will-change: transform;
+  transition: all 500ms;
+  position: absolute;
+}
+
+.slide-right-enter {
+  opacity: 0;
+  transform: translate3d(-100%, 100%, 0);
+}
+
+.slide-right-leave-active {
+  opacity: 0;
+  transform: translate3d(-100%, 100%, 0);
+}
+
+.slide-left-enter {
+  opacity: 0;
+  transform: translate3d(-100%, 100%, 0);
+}
+
+.slide-left-leave-active {
+  opacity: 0;
+  transform: translate3d(-100%, 100%, 0);
+}
+
+.slide-com-enter {
+  opacity: 0;
+  transform: translate3d(0, -100%, 0);
+}
+
+.slide-com-leave-active {
+  opacity: 0;
+  transform: translate3d(0, 100%, 0);
+}
+
+.slide-back-enter {
+  opacity: 0;
+  transform: translate3d(0, 100%, 0);
+}
+
+.slide-back-leave-active {
+  opacity: 0;
+  transform: translate3d(0, -100%, 0);
+}
