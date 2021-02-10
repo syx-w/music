@@ -1,4 +1,4 @@
-# 仿网易云音乐PCweb（Vue + elementsUI）
+# 仿网易云音乐PC端web（Vue + elementsUI）
 
 ## Project setup
 ```
