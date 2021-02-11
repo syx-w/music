@@ -62,14 +62,14 @@
         </el-form>
         <!-- 手机号登录表单 -->
         <el-form
-          ref="phoneFormRef"
+          ref="loginForm"
           label-width="0px"
           :rules="loginFormRules"
           class="login_form"
           :model="phoneLoginForm"
           :style="phoneForm ? '' : 'display:none'"
         >
-          <!-- 用户名 -->
+          <!-- 手机号 -->
           <el-form-item prop="username">
             <el-input
               placeholder="请输入手机号"
@@ -77,22 +77,26 @@
               v-model="phoneLoginForm.phone"
             ></el-input>
           </el-form-item>
-          <!-- 密码 -->
+          <!--手机验证码 -->
           <el-form-item prop="code">
             <el-input
               placeholder="短信验证码"
-              v-model="loginForm.code"
+              v-model="phoneLoginForm.captcha"
               style="width: 50%"
+              type="number"
             >
             </el-input>
-            <el-button style="width: 50%" @click="getCode" id="codeChange"
+            <el-button
+              style="width: 50%; color: red"
+              @click="getCode"
+              id="codeChange"
               >获取验证码</el-button
             >
           </el-form-item>
           <!-- 按钮 -->
           <el-form-item class="btns">
-            <el-button type="primary" @click="login">登录</el-button>
-            <el-button type="info" @click="resetLoginForm">重置</el-button>
+            <el-button type="primary" @click="codeLogin">登录</el-button>
+            <el-button type="info" @click="resetLogin">重置</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -123,7 +127,7 @@ export default {
       },
       phoneLoginForm: {
         phone: "",
-        code: null,
+        captcha: null,
       },
       //表单验证规则对象
       loginFormRules: {
@@ -145,6 +149,9 @@ export default {
   methods: {
     resetLoginForm() {
       this.$refs.loginFormRef.resetFields();
+    },
+    resetLogin() {
+      this.$refs.loginForm.resetFields();
     },
     async login() {
       const res = await this.$http.post("login/cellphone", this.loginForm);
@@ -170,11 +177,22 @@ export default {
       document.getElementById("codeChange").disabled = true;
       // this.$http.get("/captcha/sent?phone=" + this.phoneLoginForm.phone);
       let i = 60;
-      while (i > 0) {
-        setTimeout(() => {
-          document.getElementById("codeChange").innerHTML = i--;
-        }, 1000);
+      function xunHuan() {
+        document.getElementById("codeChange").innerHTML = i-- + "秒后重新发送";
+        if (i > 0) {
+          setTimeout(xunHuan, 1000);
+        } else {
+          document.getElementById("codeChange").disabled = false;
+          document.getElementById("codeChange").innerHTML = "获取验证码";
+        }
       }
+      setTimeout(xunHuan, 1000);
+    },
+    async codeLogin() {
+      let res = this.$http.get("/captcha/verify", {
+        params: this.phoneLoginForm,
+      });
+      console.log(res);
     },
   },
 };
