@@ -14,52 +14,27 @@
         <div class="change_login">
           <div
             class="phone_login"
-            @click="phoneForm = true"
-            :class="phoneForm ? 'login_active' : ''"
+            @click="phoneForm = 'one'"
+            :class="phoneForm === 'one' ? 'login_active' : ''"
           >
             手机号登录
           </div>
           <div
             class="user_login"
-            @click="phoneForm = false"
-            :class="phoneForm ? '' : 'login_active'"
+            @click="phoneForm = 'two'"
+            :class="phoneForm === 'two' ? 'login_active' : ''"
           >
             账号登录
           </div>
+          <div
+            class="user_login"
+            @click="scanCode"
+            :class="phoneForm === 'three' ? 'login_active' : ''"
+          >
+            扫码登录
+          </div>
         </div>
         <div></div>
-        <!-- 账号登录表单区 -->
-        <el-form
-          ref="loginFormRef"
-          label-width="0px"
-          :rules="loginFormRules"
-          class="login_form"
-          :model="loginForm"
-          :style="phoneForm ? 'display:none' : ''"
-        >
-          <!-- 用户名 -->
-          <el-form-item prop="username">
-            <el-input
-              placeholder="请输入账号"
-              prefix-icon="el-icon-user"
-              v-model="loginForm.phone"
-            ></el-input>
-          </el-form-item>
-          <!-- 密码 -->
-          <el-form-item prop="password">
-            <el-input
-              placeholder="请输入密码"
-              prefix-icon="el-icon-lock"
-              v-model="loginForm.password"
-              type="password"
-            ></el-input>
-          </el-form-item>
-          <!-- 按钮 -->
-          <el-form-item class="btns">
-            <el-button type="primary" @click="login">登录</el-button>
-            <el-button type="info" @click="resetLoginForm">重置</el-button>
-          </el-form-item>
-        </el-form>
         <!-- 手机号登录表单 -->
         <el-form
           ref="loginForm"
@@ -67,7 +42,7 @@
           :rules="loginFormRules"
           class="login_form"
           :model="phoneLoginForm"
-          :style="phoneForm ? '' : 'display:none'"
+          :style="phoneForm !== 'one' ? 'display:none' : ''"
         >
           <!-- 手机号 -->
           <el-form-item prop="username">
@@ -99,6 +74,53 @@
             <el-button type="info" @click="resetLogin">重置</el-button>
           </el-form-item>
         </el-form>
+        <!-- 账号登录表单区 -->
+        <el-form
+          ref="loginFormRef"
+          label-width="0px"
+          :rules="loginFormRules"
+          class="login_form"
+          :model="loginForm"
+          :style="phoneForm !== 'two' ? 'display:none' : ''"
+        >
+          <!-- 用户名 -->
+          <el-form-item prop="username">
+            <el-input
+              placeholder="请输入账号"
+              prefix-icon="el-icon-user"
+              v-model="loginForm.phone"
+            ></el-input>
+          </el-form-item>
+          <!-- 密码 -->
+          <el-form-item prop="password">
+            <el-input
+              placeholder="请输入密码"
+              v-model="loginForm.password"
+            ></el-input>
+          </el-form-item>
+          <!-- 按钮 -->
+          <el-form-item class="btns">
+            <el-button type="primary" @click="login">登录</el-button>
+            <el-button type="info" @click="resetLoginForm">重置</el-button>
+          </el-form-item>
+        </el-form>
+        <!-- 扫码区 -->
+        <div
+          class="saoCode"
+          :style="phoneForm !== 'three' ? 'display:none' : ''"
+        >
+          <div>
+            <el-image
+              src="https://github.com/Chinese0/img/blob/master/2yue/1.jpg?raw=true"
+              style="width: 150px; height: 220px"
+            >
+              <!-- <div slot="placeholder" class="image-slot">
+                加载中<span class="dot">...</span>
+              </div> -->
+            </el-image>
+          </div>
+          <h3>请打开<span style="color: red">网易云音乐</span>扫码二维码</h3>
+        </div>
       </div>
       <div class="img_box">
         <img
@@ -126,7 +148,7 @@ export default {
         password: "yuxi1314",
       },
       phoneLoginForm: {
-        phone: "",
+        phone: "15731214911",
         captcha: null,
       },
       //表单验证规则对象
@@ -139,10 +161,13 @@ export default {
           { required: true, message: "请输入登录密码", trigger: "blur" },
         ],
       },
+      // 图片连接
+      imgSrc:
+        "https://raw.githubusercontent.com/Chinese0/img/master/2%E6%9C%88/1.jpg",
       //是否显示登录对话框
       // loginShow: true,
       // 登录切换
-      phoneForm: true,
+      phoneForm: "one",
     };
   },
   created() {},
@@ -175,7 +200,7 @@ export default {
     },
     async getCode() {
       document.getElementById("codeChange").disabled = true;
-      // this.$http.get("/captcha/sent?phone=" + this.phoneLoginForm.phone);
+      this.$http.get("/captcha/sent?phone=" + this.phoneLoginForm.phone);
       let i = 60;
       function xunHuan() {
         document.getElementById("codeChange").innerHTML = i-- + "秒后重新发送";
@@ -193,6 +218,29 @@ export default {
         params: this.phoneLoginForm,
       });
       console.log(res);
+    },
+    async scanCode() {
+      this.phoneForm = "three";
+      let res = await this.$http.get("/login/qr/create");
+      console.log(res);
+    },
+    async codeLogin() {
+      if (("" + this.phoneLoginForm.captcha).length !== 4) {
+        return alert("请输入正确的验证码");
+      }
+      alert("服务不可用");
+      let res = await this.$http.get("/captcha/verify", {
+        params: this.phoneLoginForm,
+      });
+      console.log(res);
+      if (res.data.data == 200) {
+        this.$message.success("登陆成功！");
+        window.localStorage.setItem("getP", JSON.stringify(res.data.profile));
+        this.$store.commit("getLogin", true);
+        return this.$router.push("/home/find/geXing");
+      } else {
+        alert("验证码错误!");
+      }
     },
   },
 };
@@ -225,6 +273,14 @@ export default {
   width: 550px;
   background-color: rgb(247, 107, 107);
   border-radius: 10px;
+}
+.saoCode {
+  display: flex;
+  width: 450px;
+  height: 290px;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: column;
 }
 .img_box {
   width: 500px;
